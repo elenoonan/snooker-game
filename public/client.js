@@ -5,15 +5,12 @@ let balls = [];//array for balls
 let redballs = [];
 let ballsLength = 15;//number of red balls
 let pockets = [];//array for pockets
-//let holes = [];
 let ctx;//context
 let ballCount = 21;//total number of balls
 let numBalls = 10;
 let bounce = -0.5;
 let spring = 0.03;
-//let gravity = 0.1;
-// let vx = 5;
-// let vy = 5;
+
 const gravity = 0.05;
 let gravitySpeed = 0;
 let dx = -.5;
@@ -26,17 +23,11 @@ updateScore();
 function startGame(){
 
   myGameArea.start();
-  //instantiating a new component object
+  //instantiating a new object
   myGamePiece = new Cue(175, 500, "#fff", 30, 30);
 
   //spawn 15 red balls with for loop
   for (let i = 0; i < ballsLength; i ++){
-    //check + / - from edge of canvas to position balls within pocket lines
-    //let newball = new Ball(Math.floor(Math.random() *  400) + 10, Math.floor(Math.random() *  800) - 20);
-     // let newball = new Ball(200,200);
-     // redballs.push(newball);
-
-     //redballs.push(new Ball());
      balls.push(new Ball());
   }
   //add individual ball to balls array
@@ -80,7 +71,7 @@ if (balls[0].col === "#b20000") {
   }
 }
 
-// return true if the rectangle and circle are colliding
+// return true if the rectangle and circle are coliding
 function RectCircleColliding(Ball, myGamePiece) {
     let distX = Math.abs(Ball.x - myGamePiece.x - myGamePiece.width / 2);
     let distY = Math.abs(Ball.y - myGamePiece.y - myGamePiece.height / 2);
@@ -95,16 +86,6 @@ function RectCircleColliding(Ball, myGamePiece) {
     if (distX <= (myGamePiece.width / 2)) {
         return true;
         console.log("true");
-        //if top ... move 1
-        //if bottom ... move 2
-        //if left ... move 3
-        //if right ... move 4
-        // if (Ball.y <= cue.y - (cueHeight / 2)){
-        //   return true;
-        //   console.log("bottom");
-        //   move1(Ball);
-        // }
-
     }
     if (distY <= (myGamePiece.height / 2)) {
         return true;
@@ -154,14 +135,7 @@ function updateScore(){
 }
 
 
-// function move(Ball) {
-//   console.log("move");
-//   Ball.x += Math.random();
-//   Ball.y -= Math.random();
-//   Ball.vx += Math.random() * 200 - 3;
-//   Ball.vy -= Math.random() * 200 - 3;
-// };
-
+//move Ball functions called after collision detection between myGamePiece and balls
 function move1(Ball){
     console.log("moveUp");
     Ball.vx = 0;
@@ -182,34 +156,6 @@ function move4(Ball){
     Ball.vx += 5;
     Ball.vy = 0;
 };
-// function move1(Ball){
-//     console.log("movetop");
-//     // Ball.x += 1;
-//     // Ball.y -= 1;
-//     Ball.vx += 1;
-//     Ball.vy -= -1;
-// };
-// function move2(Ball){
-//     console.log("movebottom");
-//     // Ball.x -= 1;
-//     // Ball.y += 1;
-//     Ball.vx -= -1;
-//     Ball.vy += 1;
-// };
-// function move3(Ball){
-//     console.log("moveleft");
-//     // Ball.x -= 1;
-//     // Ball.y -= 1;
-//     Ball.vx -= -1;
-//     Ball.vy -= -1;
-// };
-// function move4(Ball){
-//     console.log("moveright");
-//     // Ball.x += 1;
-//     // Ball.y += 1;
-//     Ball.vx += 1;
-//     Ball.vy += 1;
-// };
 
 //creating empty canvas / game area object
 let myGameArea = {
@@ -243,29 +189,29 @@ function updateGameArea(){
     //console.log("array");
     if (RectCircleColliding(Ball, myGamePiece)) {
       //console.log("collision detection");
-          //move1(Ball);
-          //move1(Ball);
-          // if (Ball.x > myGamePiece.x && Ball.y > myGamePiece.y){
-          //   //return true;
-          //   console.log("topHit");
-          //   move1(Ball);
-          // }
-          // if (Ball.x >= myGamePiece.x && Ball.y < myGamePiece.y){
-          //   //return true;
-          //   console.log("bottomHit");
-          //   move2(Ball);
-          // }
-          if (Ball.x <= myGamePiece.x){
+
+          if (Ball.x > myGamePiece.x && Ball.y > myGamePiece.y){
             //return true;
-            console.log("leftHit");
-            move3(Ball);
+            console.log("topHit");
+            move1(Ball);
           }
-          if (Ball.x >= myGamePiece.x){
+          else if(Ball.x >= myGamePiece.x && Ball.y < myGamePiece.y){
+            //return true;
+            console.log("bottomHit");
+            move2(Ball);
+          }
+          else if (Ball.x >= myGamePiece.x){
             //return true;
             console.log("rightHit");
             move4(Ball);
           }
-          console.log("hit");
+          else if (Ball.x <= myGamePiece.x){
+            //return true;
+            console.log("leftHit");
+            move3(Ball);
+          }
+
+        //  console.log("hit");
       } else {
           //console.log("no hit");
       }});
@@ -407,7 +353,7 @@ const brownBall = new Ball(200,600, "#802b00", 4);
 const blueBall = new Ball(200,400, "#0000ff", 5);
 const pinkBall = new Ball(200,205, "#ff00ff", 6);
 const blackBall = new Ball(200,100, "#000000", 7);
-//const orangeBall = new Ball(100,100, "#ffa500", 7);//test
+//const orangeBall = new Ball(100,100, "#ffa500", 7);//used for singular ball testing purposes only
 
 
 //this is my Reptile ES6 inherited from Ball class
@@ -473,10 +419,10 @@ const pocket6 = new Pocket(385,785);
 // });
 
 //button for click testing
-const button = document.getElementById('myButton');
-button.addEventListener('click', function(e) {
-  console.log('button clicked');
-});
+// const button = document.getElementById('myButton');
+// button.addEventListener('click', function(e) {
+//   console.log('button clicked');
+// });
 
 //use API endpoint
 setInterval(function() {
