@@ -163,28 +163,28 @@ function updateScore(){
 // };
 
 function move1(Ball){
-    console.log("movetop");
+    console.log("top");
     Ball.x += 5;
     Ball.y -= 5;
     Ball.vx += 200;
     Ball.vy -= 200;
 };
 function move2(Ball){
-    console.log("movebottom");
+    console.log("bottom");
     Ball.x -= 5;
     Ball.y += 5;
     Ball.vx -= 200;
     Ball.vy += 200;
 };
 function move3(Ball){
-    console.log("moveleft");
+    console.log("left");
     Ball.x -= 5;
     Ball.y -= 5;
     Ball.vx -= 200;
     Ball.vy -= 200;
 };
 function move4(Ball){
-    console.log("moveright");
+    console.log("right");
     Ball.x += 5;
     Ball.y += 5;
     Ball.vx += 200;
@@ -226,12 +226,12 @@ function updateGameArea(){
       //console.log("collision detection");
           //move1(Ball);
           //move1(Ball);
-          if (Ball.x <= myGamePiece.x){
+          if (Ball.x < myGamePiece.x){
             //return true;
             console.log("top");
             move1(Ball);
           }
-          if (Ball.x >= myGamePiece.x){
+          if (Ball.x > myGamePiece.x){
             //return true;
             console.log("bottom");
             move2(Ball);
