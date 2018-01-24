@@ -27,7 +27,7 @@ function startGame(){
 
   myGameArea.start();
   //instantiating a new component object
-  myGamePiece = new Cue(175, 500, "#fff", 10, 10);
+  myGamePiece = new Cue(175, 500, "#fff", 25, 25);
 
   //spawn 15 red balls with for loop
   for (let i = 0; i < ballsLength; i ++){
@@ -164,31 +164,31 @@ function updateScore(){
 
 function move1(Ball){
     console.log("movetop");
-    Ball.x += 5;
-    Ball.y -= 5;
-    Ball.vx += 200;
-    Ball.vy -= 200;
+    Ball.x += 1;
+    Ball.y -= -1;
+    Ball.vx += 5;
+    Ball.vy -= -5;
 };
 function move2(Ball){
     console.log("movebottom");
-    Ball.x -= 5;
-    Ball.y += 5;
-    Ball.vx -= 200;
-    Ball.vy += 200;
+    Ball.x -= -1;
+    Ball.y += 1;
+    Ball.vx -= -5;
+    Ball.vy += 5;
 };
 function move3(Ball){
     console.log("moveleft");
-    Ball.x -= 5;
-    Ball.y -= 5;
-    Ball.vx -= 200;
-    Ball.vy -= 200;
+    Ball.x -= -1;
+    Ball.y -= -1;
+    Ball.vx -= -5;
+    Ball.vy -= -5;
 };
 function move4(Ball){
     console.log("moveright");
-    Ball.x += 5;
-    Ball.y += 5;
-    Ball.vx += 200;
-    Ball.vy += 200;
+    Ball.x += 1;
+    Ball.y += 1;
+    Ball.vx += 5;
+    Ball.vy += 5;
 };
 
 
@@ -264,9 +264,11 @@ function updateGameArea(){
     myGamePiece.newPos();
     myGamePiece.update();
     myGamePiece.collisionWithWall(myGameArea.canvas.width, myGameArea.canvas.height);
+
     balls.forEach(function(ball){
       ball.collisionWithWall(myGameArea.canvas.width, myGameArea.canvas.height);
       ball.draw();
+      ball.move();
     });
 
     pockets.forEach(function(pocket){
@@ -284,7 +286,7 @@ function updateGameArea(){
           console.log('score ' + playerScore);
           updateScore();
           //display the updated score
-          document.getElementById("playerScore").innerHTML = "Score: " + playerScore;
+          document.getElementById("playerScore").innerHTML = "Local Score: " + playerScore;
           console.log('number of balls before ' + balls.length);
           //remove this ball object from the balls array
           balls.splice(this.i, 1);
@@ -292,9 +294,14 @@ function updateGameArea(){
         }
       }
     }
+
+    // if(playerScore === 42){
+    //   alert("You Win!");
+    //   startGame();
+    // }
 }
 
-
+//create Ball class - parent class
 class Ball{
   constructor(x = 100, y = 100, col = "#b20000", points = 1, vx = 9, vy = 4, r = 7.5){
     this.x = x;
@@ -302,9 +309,10 @@ class Ball{
     this.col = col;
     this.points = points;
     this.r = r;
-    this.vx = Math.random() * 100 - 5;
-    this.vy = Math.random() * 100 - 5;
-
+    // this.vx = Math.random() * 100 - 5;
+    // this.vy = Math.random() * 100 - 5;
+    this.vx = 0; //speedX
+    this.vy = 0; //speedY
   }
 
   draw(x, y){
@@ -319,6 +327,17 @@ class Ball{
     ctx.fillStyle = this.col;
     ctx.fill();
     ctx.closePath();
+  }
+
+  move(x, y){
+    this.x += this.vx;
+    this.y += this.vy;
+
+    if(this.vx > 0){
+      this.vx --;
+    } else if (this.vx < 0){
+      this.vx ++;
+    }
   }
 
   collisionWithWall(width, height) {
@@ -352,7 +371,7 @@ class Ball{
     }
     return this;
   }
-}
+}//end of Ball class
 
 //these are my cats and dogs ES6 inherited from Ball class
 const yellowBall = new Ball(250,600, "#ffbd3f", 2);
@@ -361,7 +380,7 @@ const brownBall = new Ball(200,600, "#802b00", 4);
 const blueBall = new Ball(200,400, "#0000ff", 5);
 const pinkBall = new Ball(200,205, "#ff00ff", 6);
 const blackBall = new Ball(200,100, "#000000", 7);
-const orangeBall = new Ball(100,100, "#ffa500", 7);//test
+//const orangeBall = new Ball(100,100, "#ffa500", 7);//test
 
 
 //this is my Reptile ES6 inherited from Ball class
@@ -441,6 +460,9 @@ setInterval(function() {
     })
     .then(function(data) {
       document.getElementById('counter').innerHTML = `Current Score from Mongo DB is ${data[0]['score']}`;
+      if(data[0]['score'] === 42){
+        document.getElementById('status').innerHTML = `Game Over!`;}
+
     })
     .catch(function(error) {
       console.log(error);
