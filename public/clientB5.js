@@ -27,7 +27,7 @@ function startGame(){
 
   myGameArea.start();
   //instantiating a new component object
-  myGamePiece = new Cue(175, 500, "#fff", 30, 30);
+  myGamePiece = new Cue(175, 500, "#fff", 50, 50);
 
   //spawn 15 red balls with for loop
   for (let i = 0; i < ballsLength; i ++){
@@ -162,54 +162,62 @@ function updateScore(){
 //   Ball.vy -= Math.random() * 200 - 3;
 // };
 
-function move1(Ball){
-    console.log("moveUp");
-    Ball.vx = 0;
-    Ball.vy += 5;
-};
-function move2(Ball){
-    console.log("moveDown");
-    Ball.vx = 0;
-    Ball.vy -= 5;
-};
-function move3(Ball){
-    console.log("moveleft");
-    Ball.vx -= 5;
-    Ball.vy = 0;
-};
-function move4(Ball){
-    console.log("moveright");
-    Ball.vx += 5;
-    Ball.vy = 0;
-};
 // function move1(Ball){
 //     console.log("movetop");
-//     // Ball.x += 1;
-//     // Ball.y -= 1;
-//     Ball.vx += 1;
-//     Ball.vy -= -1;
+//     Ball.x += 1;
+//     Ball.y -= -1;
+//     Ball.vx += 5;
+//     Ball.vy -= 5;
 // };
 // function move2(Ball){
 //     console.log("movebottom");
-//     // Ball.x -= 1;
-//     // Ball.y += 1;
-//     Ball.vx -= -1;
-//     Ball.vy += 1;
+//     Ball.x -= 1;
+//     Ball.y += 1;
+//     Ball.vx -= 5;
+//     Ball.vy += 5;
 // };
 // function move3(Ball){
 //     console.log("moveleft");
-//     // Ball.x -= 1;
-//     // Ball.y -= 1;
-//     Ball.vx -= -1;
-//     Ball.vy -= -1;
+//     Ball.x -= 1;
+//     Ball.y -= -1;
+//     Ball.vx -= 5;
+//     Ball.vy -= 5;
 // };
 // function move4(Ball){
 //     console.log("moveright");
-//     // Ball.x += 1;
-//     // Ball.y += 1;
-//     Ball.vx += 1;
-//     Ball.vy += 1;
+//     Ball.x += 1;
+//     Ball.y += 1;
+//     Ball.vx += 5;
+//     Ball.vy += 5;
 // };
+function move1(Ball){
+    console.log("movetop");
+    // Ball.x += 1;
+    // Ball.y -= 1;
+    Ball.vx += 1;
+    Ball.vy -= -1;
+};
+function move2(Ball){
+    console.log("movebottom");
+    // Ball.x -= 1;
+    // Ball.y += 1;
+    Ball.vx -= -1;
+    Ball.vy += 1;
+};
+function move3(Ball){
+    console.log("moveleft");
+    // Ball.x -= 1;
+    // Ball.y -= 1;
+    Ball.vx -= -1;
+    Ball.vy -= -1;
+};
+function move4(Ball){
+    console.log("moveright");
+    // Ball.x += 1;
+    // Ball.y += 1;
+    Ball.vx += 1;
+    Ball.vy += 1;
+};
 
 //creating empty canvas / game area object
 let myGameArea = {
@@ -245,24 +253,24 @@ function updateGameArea(){
       //console.log("collision detection");
           //move1(Ball);
           //move1(Ball);
-          // if (Ball.x > myGamePiece.x && Ball.y > myGamePiece.y){
-          //   //return true;
-          //   console.log("topHit");
-          //   move1(Ball);
-          // }
-          // if (Ball.x >= myGamePiece.x && Ball.y < myGamePiece.y){
-          //   //return true;
-          //   console.log("bottomHit");
-          //   move2(Ball);
-          // }
           if (Ball.x <= myGamePiece.x){
             //return true;
-            console.log("leftHit");
-            move3(Ball);
+            console.log("top");
+            move1(Ball);
           }
           if (Ball.x >= myGamePiece.x){
             //return true;
-            console.log("rightHit");
+            console.log("bottom");
+            move2(Ball);
+          }
+          if (Ball.y <= myGamePiece.y){
+            //return true;
+            console.log("left");
+            move3(Ball);
+          }
+          if (Ball.y >= myGamePiece.y){
+            //return true;
+            console.log("right");
             move4(Ball);
           }
           console.log("hit");
@@ -275,10 +283,10 @@ function updateGameArea(){
     myGamePiece.speedX = 0;
     myGamePiece.speedY = 0;
     //for arrow control using multiple keys
-    if(myGameArea.keys && myGameArea.keys[37]){myGamePiece.speedX = -1;}
-    if(myGameArea.keys && myGameArea.keys[39]){myGamePiece.speedX = 1;}
-    if(myGameArea.keys && myGameArea.keys[38]){myGamePiece.speedY = -1;}
-    if(myGameArea.keys && myGameArea.keys[40]){myGamePiece.speedY = 1;}
+    if(myGameArea.keys && myGameArea.keys[37]){myGamePiece.speedX = -7;}
+    if(myGameArea.keys && myGameArea.keys[39]){myGamePiece.speedX = 7;}
+    if(myGameArea.keys && myGameArea.keys[38]){myGamePiece.speedY = -7;}
+    if(myGameArea.keys && myGameArea.keys[40]){myGamePiece.speedY = 7;}
 
     myGamePiece.newPos();
     myGamePiece.update();
@@ -355,14 +363,9 @@ class Ball{
 
     if(this.vx > 0){
       this.vx --;
-    }
-    if (this.vx < 0){
-      this.vx ++;
-    }
-    if(this.vy > 0){
       this.vy --;
-    }
-    if (this.vy < 0){
+    } else if (this.vx < 0){
+      this.vx ++;
       this.vy ++;
     }
   }
