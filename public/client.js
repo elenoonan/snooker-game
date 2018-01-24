@@ -52,17 +52,14 @@ function render(){
 
 //only do this if the ball color in ball array is red
 if (balls[0].col === "#b20000") {
-  //outer loop is for rows
+  //outer loop is for rows of inverted pyramid shape
   for(let row = numRows - 1; row >= 0; row--){
     y += 15; //ball[0] y position starts at 125 (110 + 15)
     x = 185 - (7.5*row); // resetting starting point (ball[0] x position starts at 155 (185 - 7.5 + row which is 4 = 155))
-    //inner loop is for columns
+    //inner loop is for columns of inverted pyramid shape
     for(let col = 0; col <= row; col++){
         x += 15;//ball[0] starts at 155 + 15 = 170
         //so ball[0] draws at x= 170 and y = 125
-        //console.log(ballNum);
-        // redballs[ballNum].x = x;
-        // redballs[ballNum].y = y;
         balls[ballNum].x = x;
         balls[ballNum].y = y;
         ballNum++;
@@ -135,7 +132,7 @@ function updateScore(){
 }
 
 
-//move Ball functions called after collision detection between myGamePiece and balls
+//move Ball functions called after collision detection between myGamePiece (cue) and hit balls
 function move1(Ball){
     console.log("moveUp");
     Ball.vx = 0;
@@ -157,7 +154,7 @@ function move4(Ball){
     Ball.vy = 0;
 };
 
-//creating empty canvas / game area object
+//creating empty canvas / game area object with own properties for canvas and start
 let myGameArea = {
   canvas: document.createElement("canvas"),
   start: function(){
@@ -182,7 +179,7 @@ let myGameArea = {
   }
 }
 
-//to make game action ready with frames
+//function make game action ready with frames
 function updateGameArea(){
 
   balls.forEach(function(Ball){
@@ -191,26 +188,22 @@ function updateGameArea(){
       //console.log("collision detection");
 
           if (Ball.x > myGamePiece.x && Ball.y > myGamePiece.y){
-            //return true;
             console.log("topHit");
             move1(Ball);
           }
           else if(Ball.x >= myGamePiece.x && Ball.y < myGamePiece.y){
-            //return true;
             console.log("bottomHit");
             move2(Ball);
           }
+          //this right direction element is not functioning correctly
           else if (Ball.x >= myGamePiece.x){
-            //return true;
             console.log("rightHit");
             move4(Ball);
           }
           else if (Ball.x <= myGamePiece.x){
-            //return true;
             console.log("leftHit");
             move3(Ball);
           }
-
         //  console.log("hit");
       } else {
           //console.log("no hit");
@@ -241,13 +234,12 @@ function updateGameArea(){
     pocket.draw();
   });
 
-//collision detection for balls hitting pockets!!!!!!
+//collision detection for balls hitting pockets[] array
   for(i = 0; i < balls.length; i++){
     for(j = 0; j < pockets.length; j++){
-
         //console.log(getDistance (balls[i].x, balls[i].y, pockets[j].x, pockets[j].y));
         if(getDistance(balls[i].x, balls[i].y, pockets[j].x, pockets[j].y) <  balls[i].r + pockets[j].r){
-          // add ball points to playerScore array
+          // add ball points to playerScore 
           playerScore += balls[i].points;
           console.log('score ' + playerScore);
           updateScore();
@@ -260,11 +252,6 @@ function updateGameArea(){
         }
       }
     }
-
-    // if(playerScore === 42){
-    //   alert("You Win!");
-    //   startGame();
-    // }
 }
 
 //create Ball class - parent class
@@ -275,8 +262,6 @@ class Ball{
     this.col = col;
     this.points = points;
     this.r = r;
-    // this.vx = Math.random() * 100 - 5;
-    // this.vy = Math.random() * 100 - 5;
     this.vx = 0; //speedX
     this.vy = 0; //speedY
   }
@@ -314,38 +299,29 @@ class Ball{
   }
 
   collisionWithWall(width, height) {
-    //this.bounce = false;
     if (this.x + this.r > width) {
-        console.log("right");
-      //this.bounce = true;
+      console.log("right");
       this.x = width - this.r;
       this.vx *= -1;
-      // this.vx = -this.vx;
     } else if(this.x - this.r < 0) {
       console.log("left");
-      //this.bounce = true;
       this.x = 0 + this.r;
       this.vx *= -1;
-      // this.vx = -this.vx;
     }
     if (this.y + this.r > height) {
       console.log("bottom");
-      //this.bounce = true;
       this.y = height - this.r;
       this.vy *= -1;
-      // this.vy = -this.vy;
-
     } else if (this.y - this.r < 0) {
       console.log("top");
-      //this.bounce = true;
       this.y = 0 + this.r;
       this.vy *= -1;
-      // this.vy = -this.vy;
     }
     return this;
   }
 }//end of Ball class
 
+//child objects of Ball class using ES6 syntactic sugar for classical model for inheritance
 //these are my cats and dogs ES6 inherited from Ball class
 const yellowBall = new Ball(250,600, "#ffbd3f", 2);
 const greenBall = new Ball(150,600, "#004000", 3);
@@ -365,6 +341,7 @@ class Cue extends Ball{
     this.speedX = 50//for gamePiece
     this.speedY = 50;
   }
+  //additional functions not inherited from Ball class
 update(){
   ctx = myGameArea.context;
   ctx.fillStyle = this.col;
@@ -376,11 +353,13 @@ newPos(){
   }
 }
 
+
 //this is another 'Reptile' ES6 inherited from Ball class
 class Pocket extends Ball{
   constructor(x, y, col, points, vx, vy, r){
     super(x, y, col = "#000", points = 0, vx, vy, r = 20);
   }
+  //own draw function overriding that of Ball class
   draw(){
     //console.log("circle" + this.x + this.y + this.col);
     ctx.beginPath();
@@ -392,6 +371,7 @@ class Pocket extends Ball{
     ctx.stroke();
   }
 }
+//child objects of Pocket class using ES6 syntactic sugar for classical model for inheritance
 //these are my crocs as children of my second Reptile ES6 inherited from Ball class
 const pocket1 = new Pocket(15,15);
 const pocket2 = new Pocket(385,15);
@@ -400,31 +380,9 @@ const pocket4 = new Pocket(385,400);
 const pocket5 = new Pocket(15,785);
 const pocket6 = new Pocket(385,785);
 
-// //button for click testing
-// const button = document.getElementById('myButton');
-// button.addEventListener('click', function(e) {
-//   console.log('button clicked');
-//
-//   fetch('/clicked', {method: 'POST'})
-//   .then(function(response){
-//     if(response.ok){
-//       console.log('Click was recorded');
-//       return;
-//     }
-//     throw new Error('Request failed.');
-//   })
-//   .catch(function(error) {
-//     console.log(error);
-//   });
-// });
 
-//button for click testing
-// const button = document.getElementById('myButton');
-// button.addEventListener('click', function(e) {
-//   console.log('button clicked');
-// });
-
-//use API endpoint
+//use API endpoint '/scored'
+//setInterval function polls the server every second to retrieve the score data and will update the score
 setInterval(function() {
   fetch('/scored', {method: 'GET'})
     .then(function(response) {

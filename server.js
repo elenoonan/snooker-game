@@ -15,7 +15,7 @@ let db;
 
 // ***Replace the URL below with the URL for your database***
 //const url =  'mongodb://user:password@mongo_address:mongo_port/databaseName';
-// E.g. for option 2) above this will be:
+
 const url =  'mongodb://localhost:27017/score';
 
 MongoClient.connect(url, (err, database) => {
@@ -33,22 +33,6 @@ MongoClient.connect(url, (err, database) => {
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
-
-
-//recording button clicks in DB
-// app.post('/clicked', (req, res) => {
-//   const scores = {score: 10};
-//   //console.log(score);
-//   console.log(db);
-//
-//   db.collection('score').save(scores, (err, result) => {
-//     if (err){
-//       return console.log(err);
-//     }
-//     console.log('click added to db');
-//     res.sendStatus(201);
-//   });
-// });
 
 
 //sending a json object in request body and then getting the score value ... score is a property of the json object
